@@ -1,5 +1,4 @@
-#include "ccut.h"
-
+#include "helpers.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -84,32 +83,39 @@ int handleInput(FILE* input, Config* config)
 {
     //todo
 
-    char line[]="";
-    int lineNum =0;
+    char inputBuffer[1024];
+    char outputBuffer[1024];
+    int lineNum = 0;
 
-
-    while (fgets(line, sizeof(line), input)) {
-
-
-        //-s skip line that do not have right delimiter
-        if (config->ignoreLines && strchr(line, config->inDelimiter)==NULL) {
+    while (fgets(inputBuffer, sizeof(inputBuffer), input))
+    {
+        //-s skip lines that do not have the right delimiter
+        if (config->ignoreLines && strchr(inputBuffer, config->inDelimiter) == NULL)
+        {
             continue;
         }
-        /*
+
+        // -q
+        if (config->besteFunktion)
+        {
+            initQuotesMode(inputBuffer, outputBuffer);
+        }
+
         //header handling
-        if (lineNum==0 && config->header) {
-            char *result = handleLine(line);
+        if (lineNum == 0 && config->header)
+        {
+            char* result = handleLine(line);
             printLine(result);
             lineNum++;
             continue;
         }
 
-        char * result = handleLine(line);
-        printLine(result);
+        // char * result = handleLine(line);
+        // printLine(result);
 
         //free all strings
         //return 0 and err msgs
-        */
+
         lineNum++;
     }
 
@@ -164,13 +170,13 @@ int handleArguments(int argc, char* argv[], Config* config)
         {
             if (i + 1 >= argc)
             {
-                fprintf(stderr, "Bei -d Bitte trennzeichen angeben.\n");
+                fprintf(stderr, "Bei -d Bitte Trennzeichen angeben.\n");
                 return 0;
             }
             i++;
             if (strlen(argv[i]) != 1)
             {
-                fprintf(stderr, "Trennezcihen darf nur ein zeichen sein.\n");
+                fprintf(stderr, "Trennzeichen darf nur ein Zeichen sein.\n");
                 return 0;
             }
             config->inDelimiter = argv[i][0];
@@ -236,13 +242,13 @@ int getFields(char* str_fields, Config* config)
             return 0;
         }
 
-        int fieldNum = atoi(strToken);
-        if (fieldNum < 1)
+        int fieldVal = atoi(strToken);
+        if (fieldVal < 1)
         {
             fprintf(stderr, "Fehlerhafte Spaltenangabe.\n");
             return 0;
         }
-        config->fields[config->fieldcounter] = fieldNum;
+        config->fields[config->fieldcounter] = fieldVal;
         config->fieldcounter++;
         strToken = strtok(NULL, ",");
     }
