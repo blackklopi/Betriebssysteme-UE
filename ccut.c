@@ -8,7 +8,7 @@
 
 typedef struct Config
 {
-    int* fields[MAXFIELDS];
+    int fields[MAXFIELDS];
     int fieldcounter;
     char inDelimiter;
     char outDelimiter;
@@ -83,6 +83,43 @@ int main(int argc, char* argv[])
 int handleInput(FILE* input, Config* config)
 {
     //todo
+
+    char line[]="";
+    int lineNum =0;
+
+
+    while (fgets(line, sizeof(line), input)) {
+
+
+        //-s skip line that do not have right delimiter
+        if (config->ignoreLines && strchr(line, config->inDelimiter)==NULL) {
+            continue;
+        }
+        /*
+        //header handling
+        if (lineNum==0 && config->header) {
+            char *result = handleLine(line);
+            printLine(result);
+            lineNum++;
+            continue;
+        }
+
+        char * result = handleLine(line);
+        printLine(result);
+
+        //free all strings
+        //return 0 and err msgs
+        */
+        lineNum++;
+    }
+
+    return 1;
+
+    //zeilenweise lesen
+
+    //zeile splitten
+
+    //print lines
 }
 
 int handleArguments(int argc, char* argv[], Config* config)
@@ -116,6 +153,7 @@ int handleArguments(int argc, char* argv[], Config* config)
                 fprintf(stderr, "Bei Verwendung von -f müssen Spalten angegeben werden.\n");
                 return 1;
             }
+            i++;
             if (!getFields(argv[fields], config))
             {
                 return 1;
@@ -184,8 +222,9 @@ int handleArguments(int argc, char* argv[], Config* config)
 
 int getFields(char* str_fields, Config* config)
 {
-    char* str_fields_cpy = "";
-    strcpy(str_fields_cpy, str_fields);
+    char str_fields_cpy[256];
+    strncpy(str_fields_cpy, str_fields, sizeof(str_fields_cpy) - 1);
+    str_fields_cpy[sizeof(str_fields_cpy) - 1] = '\0';
 
     char* strToken = strtok(str_fields_cpy, &config->inDelimiter);
 
@@ -203,8 +242,9 @@ int getFields(char* str_fields, Config* config)
             fprintf(stderr, "Fehlerhafte Spaltenangabe.\n");
             return 0;
         }
-        config->fields[config->fieldcounter] = &fieldNum;
+        config->fields[config->fieldcounter] = fieldNum;
         config->fieldcounter++;
+        strToken = strtok(NULL, ",");
     }
     if (config->fieldcounter == 0)
     {
