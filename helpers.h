@@ -1,3 +1,20 @@
 #pragma once
 
-void initQuotesMode(char inputBuffer[], char outputBuffer[]);
+#define MAXFIELDS 20
+
+typedef struct Config
+{
+    int fields[MAXFIELDS];
+    int fieldcounter;
+    char inDelimiter;
+    char outDelimiter;
+    int besteFunktion;
+    int header;
+    int ignoreLines;
+    int strict;
+    char* file;
+} Config;
+
+void initQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf);
+
+void processFields(char outputBuffer[], Config* conf);

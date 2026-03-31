@@ -1,15 +1,24 @@
 #include "helpers.h"
+
+#include <stdbool.h>
 #include <stdio.h>
 
-//1. Copy all characters until current character == ' " '
-//2.1 set in_quotes if i + 1 != ' " '
-// 2.1.2 if i + 1 == ' " ' copy and skip i + 1 iteration
-// 2.1.3 if i + 2 == ' " ' and i + 3 != ' " ' ==> unset in_quotes (exit quotes mode)
-// 2.1.4 if i + 3 == ' " ' skip i + 3 iteration
+// Config config = {
+//     .fieldcounter = 0,
+//     .inDelimiter = ',',
+//     .outDelimiter = ',',
+//     .besteFunktion = 0,
+//     .header = 0,
+//     .ignoreLines = 0,
+//     .strict = 0,
+//     .file = NULL
+// };
 
-// 2.2 skip i + 1 iteration if i + 1 == ' " ' and copy one ' " '
-// 2.2.1 if i + 2 == ' " ' go to 2.1.2
-void initQuotesMode(char inputBuffer[], char outputBuffer[])
+//Copy all characters until current character == ' " '
+//delete all single quotes ("...") and put fake inDelimiter into buffer
+//replace double quote with single quote
+//if outside quotes replace every inDelimiter with outDelimiter
+void initQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
 {
     int in_quotes = 0;
     int fieldPos = 0;
@@ -28,11 +37,13 @@ void initQuotesMode(char inputBuffer[], char outputBuffer[])
                 in_quotes = !in_quotes;
             }
         }
-        else if (inputBuffer[i] == ',' && !in_quotes)
+        else if (!in_quotes && inputBuffer[i] == conf->inDelimiter)
         {
-            outputBuffer[fieldPos] = '\0';
-            printf("Feld: %s\n", outputBuffer);
-            fieldPos = 0;
+            outputBuffer[fieldPos++] = conf->outDelimiter;
+        }
+        else if (in_quotes && inputBuffer[i] == conf->inDelimiter)
+        {
+            outputBuffer[fieldPos++] = inputBuffer[i];
         }
         else
         {
@@ -40,4 +51,51 @@ void initQuotesMode(char inputBuffer[], char outputBuffer[])
         }
     }
     outputBuffer[fieldPos] = '\0';
+}
+
+void processFields(char outputBuffer[], Config* conf)
+{
+    int curFieldStart = 0;
+    int curFieldEnd = 0;
+    int fieldInd = 0;
+    int currentColumn = 1;
+    bool outsideDelim = false;
+
+    int i = 0;
+    while (outputBuffer[i] != '\0' && fieldInd != conf->fieldcounter)
+    {
+        curFieldStart = i;
+
+        // traverse buffer until delimiter or end of line
+        while (outputBuffer[i] != '\0' && outputBuffer[i] != conf->outDelimiter)
+        {
+            i++;
+        }
+
+        curFieldEnd = i;
+
+        if (conf->fields[fieldInd] == currentColumn)
+        {
+            fieldInd++;
+            // ignore all inDelimiters that occur before a field
+            // if the field itself contains a inDelimiter, print it
+            if (outsideDelim)
+            {
+                // once a column is valid, outsideDelim = true and the outDelimiter will be appended to the previous field
+                fprintf(stdout, "%c", conf->outDelimiter);
+            }
+
+            for (int j = curFieldStart; j < curFieldEnd; j++)
+            {
+                fprintf(stdout, "%c", outputBuffer[j]);
+            }
+            outsideDelim = true;
+        }
+
+        if (outputBuffer[i] == conf->outDelimiter)
+        {
+            i++;
+        }
+        currentColumn++;
+    }
 }
