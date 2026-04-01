@@ -1,25 +1,21 @@
-#include <stdbool.h>
-
-#include "helpers.h"
-#include <stdio.h>
+#include "../util/helpers.h"
+//#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define MAXFIELDS 20
+//#define MAXFIELDS 20
 
 void help(char* progName);
 
-int handleArguments(int argc, char* argv[], Config* config);
-
 void version(void);
+
+int handleArguments(int argc, char* argv[], Config* config);
 
 int getFields(char* str_fields, Config* config);
 
-int handleInput(FILE* file, Config* config);
-
 int main(int argc, char* argv[])
 {
-    printf("%d\n", argc);
+    //printf("%d\n", argc);
 
     //default config
     Config config = {
@@ -68,67 +64,7 @@ int main(int argc, char* argv[])
     return 1;
 }
 
-int handleInput(FILE* input, Config* config)
-{
-    //todo
 
-    char inputBuffer[1024];
-    char outputBuffer[1024];
-    int lineNum = 0;
-
-    while (fgets(inputBuffer, sizeof(inputBuffer), input))
-    {
-        // extract \n for further processing, add it back at the end of processing and line end
-        if (inputBuffer[strlen(inputBuffer) - 1] == '\n')
-        {
-            inputBuffer[strlen(inputBuffer) - 1] = '\0';
-        }
-
-        //header handling
-        if (lineNum == 0 && config->header)
-        {
-            // if header is set it will never be skipped by -s
-        }
-        //-s skip lines that do not have the right delimiter
-        else if (config->ignoreLines && strchr(inputBuffer, config->inDelimiter) == NULL)
-        {
-            continue;
-        }
-
-        // initialize unitialized outputBuffer, gets skipped by -s check for small performance gain
-        strcpy(outputBuffer, inputBuffer);
-
-        // -q,
-        if (config->besteFunktion)
-        {
-            initQuotesMode(inputBuffer, outputBuffer, config);
-        }
-
-        // process fields
-        processFields(outputBuffer, config);
-
-        // char * result = handleLine(line);
-        // printLine(result);
-
-        //free all strings
-        //return 0 and err msgs
-
-        lineNum++;
-        fprintf(stdout, "\n");
-    }
-
-    fprintf(stdout, "linenum: %d\n", lineNum);
-    fprintf(stdout, "fieldcounter: %d\n", config->fieldcounter);
-    fprintf(stdout, "field: %d\n", config->fields[0]);
-
-    return 1;
-
-    //zeilenweise lesen
-
-    //zeile splitten
-
-    //print lines
-}
 
 int handleArguments(int argc, char* argv[], Config* config)
 {

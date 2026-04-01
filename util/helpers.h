@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 
 #define MAXFIELDS 20
 
@@ -18,3 +19,5 @@ typedef struct Config
 void initQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf);
 
 void processFields(char outputBuffer[], Config* conf);
+
+int handleInput(FILE* input, Config* config);

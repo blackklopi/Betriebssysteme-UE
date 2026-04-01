@@ -1,18 +1,9 @@
-#include "helpers.h"
+#include "../util/helpers.h"
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
-// Config config = {
-//     .fieldcounter = 0,
-//     .inDelimiter = ',',
-//     .outDelimiter = ',',
-//     .besteFunktion = 0,
-//     .header = 0,
-//     .ignoreLines = 0,
-//     .strict = 0,
-//     .file = NULL
-// };
 
 //Copy all characters until current character == ' " '
 //delete all single quotes ("...") and put fake inDelimiter into buffer
@@ -108,4 +99,66 @@ void processFields(char outputBuffer[], Config* conf)
         }
         currentColumn++;
     }
+}
+
+int handleInput(FILE* input, Config* config)
+{
+    //todo
+
+    char inputBuffer[1024];
+    char outputBuffer[1024];
+    int lineNum = 0;
+
+    while (fgets(inputBuffer, sizeof(inputBuffer), input))
+    {
+        // extract \n for further processing, add it back at the end of processing and line end
+        if (inputBuffer[strlen(inputBuffer) - 1] == '\n')
+        {
+            inputBuffer[strlen(inputBuffer) - 1] = '\0';
+        }
+
+        //header handling
+        if (lineNum == 0 && config->header)
+        {
+            // if header is set it will never be skipped by -s
+        }
+        //-s skip lines that do not have the right delimiter
+        else if (config->ignoreLines && strchr(inputBuffer, config->inDelimiter) == NULL)
+        {
+            continue;
+        }
+
+        // initialize unitialized outputBuffer, gets skipped by -s check for small performance gain
+        strcpy(outputBuffer, inputBuffer);
+
+        // -q,
+        if (config->besteFunktion)
+        {
+            initQuotesMode(inputBuffer, outputBuffer, config);
+        }
+
+        // process fields
+        processFields(outputBuffer, config);
+
+        // char * result = handleLine(line);
+        // printLine(result);
+
+        //free all strings
+        //return 0 and err msgs
+
+        lineNum++;
+        fprintf(stdout, "\n");
+    }
+
+    fprintf(stdout, "linenum: %d\n", lineNum);
+    fprintf(stdout, "fieldcounter: %d\n", config->fieldcounter);
+    fprintf(stdout, "field: %d\n", config->fields[0]);
+
+    return 1;
+
+    //zeilenweise lesen
+
+    //zeile splitten
+
+    //print lines
 }

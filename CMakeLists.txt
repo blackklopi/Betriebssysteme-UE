@@ -4,8 +4,21 @@ project(BS_Code C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(ccut ccut.c
-        ccut.h
-        helpers.c
-        helpers.h
+add_subdirectory(src)
+
+add_subdirectory(util)
+
+add_executable(ccut)
+
+target_sources(ccut
+        PRIVATE
+        src/ccut.c
+        src/helpers.c
+
+        PUBLIC
+        FILE_SET HEADERS
+        FILES util/helpers.h
 )
+
+
+
