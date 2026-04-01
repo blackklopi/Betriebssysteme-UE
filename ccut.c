@@ -117,6 +117,10 @@ int handleInput(FILE* input, Config* config)
         fprintf(stdout, "\n");
     }
 
+    fprintf(stdout, "linenum: %d\n", lineNum);
+    fprintf(stdout, "fieldcounter: %d\n", config->fieldcounter);
+    fprintf(stdout, "field: %d\n", config->fields[0]);
+
     return 1;
 
     //zeilenweise lesen
