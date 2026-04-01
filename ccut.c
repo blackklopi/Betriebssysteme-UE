@@ -75,81 +75,37 @@ int handleInput(FILE* input, Config* config)
     char inputBuffer[1024];
     char outputBuffer[1024];
     int lineNum = 0;
-    int curFieldStart = 0;
-    int curFieldEnd = 0;
-    int fieldInd = 0;
-    int currentColumn = 1;
-    bool outsideDelim = false;
 
     while (fgets(inputBuffer, sizeof(inputBuffer), input))
     {
-        int splitCount = 0;
-
-        // extract \n for further processing, add it back at the end of all processing and line end
+        // extract \n for further processing, add it back at the end of processing and line end
         if (inputBuffer[strlen(inputBuffer) - 1] == '\n')
         {
             inputBuffer[strlen(inputBuffer) - 1] = '\0';
         }
 
+        //header handling
+        if (lineNum == 0 && config->header)
+        {
+            // if header is set it will never be skipped by -s
+        }
         //-s skip lines that do not have the right delimiter
-        if (config->ignoreLines && strchr(inputBuffer, config->inDelimiter) == NULL)
+        else if (config->ignoreLines && strchr(inputBuffer, config->inDelimiter) == NULL)
         {
             continue;
         }
 
-        // -q
+        // initialize unitialized outputBuffer, gets skipped by -s check for small performance gain
+        strcpy(outputBuffer, inputBuffer);
+
+        // -q,
         if (config->besteFunktion)
         {
             initQuotesMode(inputBuffer, outputBuffer, config);
         }
 
-        //header handling
-        if (lineNum == 0 && config->header)
-        {
-            char* result = outputBuffer;
-            fprintf(stdout, "%s", result);
-            lineNum++;
-            continue;
-        }
-
         // process fields
-        int i = 0;
-        while (outputBuffer[i] != '\0' && fieldInd != config->fieldcounter)
-        {
-            curFieldStart = i;
-
-            // traverse buffer until delimiter or end of line
-            while (outputBuffer[i] != '\0' && outputBuffer[i] != config->inDelimiter)
-            {
-                i++;
-            }
-
-            curFieldEnd = i;
-
-            if (config->fields[fieldInd] == currentColumn)
-            {
-                fieldInd++;
-                // ignore all inDelimiters that occur before a field
-                // if the field itself contains a inDelimiter, print it
-                if (outsideDelim)
-                {
-                    // once a column is valid, outsideDelim = true and the outDelimiter will be appended after every field
-                    fprintf(stdout, "%c", config->outDelimiter);
-                }
-
-                for (int j = curFieldStart; j < curFieldEnd; j++)
-                {
-                    fprintf(stdout, "%c", outputBuffer[j]);
-                }
-                outsideDelim = true;
-            }
-
-            if (outputBuffer[i] == config->inDelimiter)
-            {
-                i++;
-            }
-            currentColumn++;
-        }
+        processFields(outputBuffer, config);
 
         // char * result = handleLine(line);
         // printLine(result);

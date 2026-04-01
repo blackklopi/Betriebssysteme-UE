@@ -20,6 +20,11 @@
 //if outside quotes replace every inDelimiter with outDelimiter
 void initQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
 {
+    // use internal delimiter so that if inDelimiter=outDelimiter still works
+    //0x1F = ASCII Unit Seperator that never appears in a file
+    //provided by chat-gpt
+    char TEMP_DELIM = 0x1F;
+
     int in_quotes = 0;
     int fieldPos = 0;
 
@@ -39,7 +44,7 @@ void initQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
         }
         else if (!in_quotes && inputBuffer[i] == conf->inDelimiter)
         {
-            outputBuffer[fieldPos++] = conf->outDelimiter;
+            outputBuffer[fieldPos++] = TEMP_DELIM;
         }
         else if (in_quotes && inputBuffer[i] == conf->inDelimiter)
         {
@@ -55,6 +60,11 @@ void initQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
 
 void processFields(char outputBuffer[], Config* conf)
 {
+    // use internal delimiter so that if inDelimiter=outDelimiter still works
+    //0x1F = ASCII Unit Seperator that never appears in a file
+    //provided by chat-gpt
+    char TEMP_DELIM = 0x1F;
+
     int curFieldStart = 0;
     int curFieldEnd = 0;
     int fieldInd = 0;
@@ -67,7 +77,7 @@ void processFields(char outputBuffer[], Config* conf)
         curFieldStart = i;
 
         // traverse buffer until delimiter or end of line
-        while (outputBuffer[i] != '\0' && outputBuffer[i] != conf->outDelimiter)
+        while (outputBuffer[i] != '\0' && outputBuffer[i] != TEMP_DELIM)
         {
             i++;
         }
@@ -92,7 +102,7 @@ void processFields(char outputBuffer[], Config* conf)
             outsideDelim = true;
         }
 
-        if (outputBuffer[i] == conf->outDelimiter)
+        if (outputBuffer[i] == TEMP_DELIM)
         {
             i++;
         }
