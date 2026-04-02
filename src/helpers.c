@@ -161,6 +161,9 @@ int handleInput(FILE* input, Config* config)
         if (lineNum == 0 && config->header)
         {
             // if header is set it will never be skipped by -s
+        }else if (lineNum == 0 && !config->header) {
+            lineNum++;
+            continue;
         }
         //-s skip lines that do not have the right delimiter
         else if (config->ignoreLines && strchr(inputBuffer, config->inDelimiter) == NULL)

@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
         .file = NULL
     };
 
-    if (!handleArguments(argc, argv, &config))
+    if (handleArguments(argc, argv, &config))
     {
         //Fehler
         return 1;
@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
     FILE* input;
     int close = 0;
 
-    if (config.file == NULL)
+    if (config.file == NULL || config.file[0] == '-')
     {
         input = stdin;
     }
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
         if (input == NULL)
         {
             fprintf(stderr, "File konnte nicht gelsen werden\n");
-            return 0;
+            return 1;
         }
     }
 
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
     {
         fclose(input);
     }
-    return 1;
+    return 0;
 }
 
 
@@ -80,14 +80,14 @@ int handleArguments(int argc, char* argv[], Config* config)
             help(arg);
 
             //Abbruch bei help
-            return 0;
+            return 1;
         }
         else if (strcmp(arg, "--version") == 0)
         {
             version();
 
             //Abbruch bei version
-            return 0;
+            return 1;
         }
         else if (strcmp(arg, "-f") == 0)
         {
@@ -100,7 +100,7 @@ int handleArguments(int argc, char* argv[], Config* config)
             i++;
             if (!getFields(argv[fields], config))
             {
-                return 1;
+                return 0;
             }
             fieldsInput = 1;
         }
@@ -109,13 +109,13 @@ int handleArguments(int argc, char* argv[], Config* config)
             if (i + 1 >= argc)
             {
                 fprintf(stderr, "Bei -d Bitte Trennzeichen angeben.\n");
-                return 0;
+                return 1;
             }
             i++;
             if (strlen(argv[i]) != 1)
             {
                 fprintf(stderr, "Trennzeichen darf nur ein Zeichen sein.\n");
-                return 0;
+                return 1;
             }
             config->inDelimiter = argv[i][0];
         }
@@ -124,13 +124,13 @@ int handleArguments(int argc, char* argv[], Config* config)
             if (i + 1 >= argc)
             {
                 fprintf(stderr, "Bei Verwendung von -o bitte Trennzeichen angeben.\n");
-                return 0;
+                return 1;
             }
             i++;
             if (strlen(argv[i]) != 1)
             {
                 fprintf(stderr, "Trennezcihen darf nur ein zeichen sein.\n");
-                return 0;
+                return 1;
             }
             config->outDelimiter = argv[i][0];
         }
@@ -159,9 +159,9 @@ int handleArguments(int argc, char* argv[], Config* config)
     if (!fieldsInput)
     {
         fprintf(stderr, "Keine Spalten angegeben.\n");
-        return 0;
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
 int getFields(char* str_fields, Config* config)
