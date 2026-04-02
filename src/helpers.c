@@ -1,14 +1,7 @@
 #include "../util/helpers.h"
-
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-
-
-//Copy all characters until current character == ' " '
-//delete all single quotes ("...") and put fake inDelimiter into buffer
-//replace double quote with single quote
-//if outside quotes replace every inDelimiter with outDelimiter
 
 void initWithoutQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
 {

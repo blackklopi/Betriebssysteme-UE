@@ -15,8 +15,6 @@ int getFields(char* str_fields, Config* config);
 
 int main(int argc, char* argv[])
 {
-    //printf("%d\n", argc);
-
     //default config
     Config config = {
         .fieldcounter = 0,
@@ -129,7 +127,7 @@ int handleArguments(int argc, char* argv[], Config* config)
             i++;
             if (strlen(argv[i]) != 1)
             {
-                fprintf(stderr, "Trennezcihen darf nur ein zeichen sein.\n");
+                fprintf(stderr, "Trennzeichen darf nur ein Zeichen sein.\n");
                 return 1;
             }
             config->outDelimiter = argv[i][0];

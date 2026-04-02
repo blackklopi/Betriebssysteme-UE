@@ -26,17 +26,17 @@ Wenn kein `DATEINAME` angegeben wird oder `-` als Dateiname verwendet wird, lies
 
 ## Optionen
 
-| Option | Beschreibung |
-|---|---|
-| `-f fields` | Felder, die ausgegeben werden sollen (z. B. `1`, `1,3,5`, `2,4`). Feldnummern beginnen bei **1**. |
-| `-d delimiter` | Eingabe-Trennzeichen (Standard: `,`) |
-| `-o delimiter` | Ausgabe-Trennzeichen (Standard: `,`) |
-| `-q` | Aktiviert Anführungszeichen-Behandlung: Trennzeichen innerhalb von `"..."` werden nicht als Feldgrenzen interpretiert. `""` innerhalb eines Feldes wird als wörtliches `"` behandelt. |
-| `-H`, `--header` | Erste Zeile wird als Kopfzeile interpretiert und entsprechend der Feldauswahl ausgegeben |
-| `-s` | Unterdrückt Zeilen, die das Trennzeichen nicht enthalten |
-| `--strict` | Bricht bei fehlerhafter Eingabe mit Fehlermeldung (auf `stderr`) und Fehlercode ab |
-| `-h`, `--help` | Gibt eine Hilfeinformation aus und beendet das Programm |
-| `--version` | Gibt die Versionsinformation aus und beendet das Programm |
+| Option               | Beschreibung                                                                                                                                                                          |
+|:---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `-f fields`          | Felder, die ausgegeben werden sollen (z. B. `1`, `1,3,5`, `2,4`). Feldnummern beginnen bei **1**.                                                                                     |
+| `-d delimiter`       | Eingabe-Trennzeichen (Standard: `,`)                                                                                                                                                  |
+| `-o delimiter`       | Ausgabe-Trennzeichen (Standard: `,`)                                                                                                                                                  |
+| `-q`                 | Aktiviert Anführungszeichen-Behandlung: Trennzeichen innerhalb von `"..."` werden nicht als Feldgrenzen interpretiert. `""` innerhalb eines Feldes wird als wörtliches `"` behandelt. |
+| `-H`,<br/>`--header` | Erste Zeile wird als Kopfzeile interpretiert und entsprechend der Feldauswahl ausgegeben                                                                                              |
+| `-s`                 | Unterdrückt Zeilen, die das Trennzeichen nicht enthalten                                                                                                                              |
+| `--strict`           | Bricht bei fehlerhafter Eingabe mit Fehlermeldung (auf `stderr`) und Fehlercode ab                                                                                                    |
+| `-h`, <br/>`--help`  | Gibt eine Hilfeinformation aus und beendet das Programm                                                                                                                               |
+| `--version`          | Gibt die Versionsinformation aus und beendet das Programm                                                                                                                             |
 
 ---
 
