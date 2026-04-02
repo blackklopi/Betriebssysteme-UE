@@ -11,7 +11,7 @@
 ```shell
 git clone https://github.com/blackklopi/Betriebssysteme-UE.git
 cd Betriebssysteme-UE/
-gcc -o ccut src/ccut.c src/helpers.c util/helpers.h
+gcc -o ccut src/*.c  util/helpers.h
 ```
 
 ## Symlink erstellen
