@@ -9,6 +9,46 @@
 //delete all single quotes ("...") and put fake inDelimiter into buffer
 //replace double quote with single quote
 //if outside quotes replace every inDelimiter with outDelimiter
+
+void initWithoutQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
+{
+    // use internal delimiter so that if inDelimiter=outDelimiter still works
+    //0x1F = ASCII Unit Seperator that never appears in a file
+    //provided by chat-gpt
+    char TEMP_DELIM = 0x1F;
+
+    int in_quotes = 0;
+    int fieldPos = 0;
+
+    for (int i = 0; inputBuffer[i] != '\0'; i++)
+    {
+        if (inputBuffer[i] == '"')
+        {
+            if (in_quotes && inputBuffer[i + 1] == '"')
+            {
+                outputBuffer[fieldPos++] = '"';
+                i++;
+            }
+            else
+            {
+                in_quotes = !in_quotes;
+            }
+        }
+        else if (!in_quotes && inputBuffer[i] == conf->inDelimiter)
+        {
+            outputBuffer[fieldPos++] = TEMP_DELIM;
+        }
+        else if (in_quotes && inputBuffer[i] == conf->inDelimiter)
+        {
+            outputBuffer[fieldPos++] = TEMP_DELIM;
+        }
+        else
+        {
+            outputBuffer[fieldPos++] = inputBuffer[i];
+        }
+    }
+    outputBuffer[fieldPos] = '\0';
+}
 void initQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
 {
     // use internal delimiter so that if inDelimiter=outDelimiter still works
@@ -135,6 +175,10 @@ int handleInput(FILE* input, Config* config)
         if (config->besteFunktion)
         {
             initQuotesMode(inputBuffer, outputBuffer, config);
+        }else {
+            //todo
+            //without quote
+            initWithoutQuotesMode(inputBuffer, outputBuffer, config);
         }
 
         // process fields
