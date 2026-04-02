@@ -1,7 +1,4 @@
 #include "../util/helpers.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
 
 void initWithoutQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
 {

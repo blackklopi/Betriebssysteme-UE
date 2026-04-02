@@ -8,10 +8,16 @@
 
 ## Kompilierung
 
-```bash
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+```shell
+git clone https://github.com/blackklopi/Betriebssysteme-UE.git
+cd Betriebssysteme-UE/
+gcc -o ccut src/ccut.c src/helpers.c util/helpers.h
 ```
 
+## Symlink erstellen
+```
+sudo ln -s ~/Betriebssysteme-UE/ccut /usr/bin/ccut
+```
 ---
 
 ## Verwendung
@@ -50,7 +56,7 @@ ccut -f 1,3 personen.csv
 cat personen.csv | ccut -f 2 -q
 
 # Felder 1 und 4 mit Semikolon als Ausgabe-Trennzeichen in Datei schreiben
-ccut -f 1,4 -q -o ';' adressen.csv > ausgabe.txt
+ccut -f 1,4 -q -o ';' addresses.csv > ausgabe.txt
 
 # Felder 2 und 5 aus Pipe lesen, strenge Fehlerprüfung
 cat daten.csv | ccut -f 2,5 -q --strict

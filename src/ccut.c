@@ -1,9 +1,4 @@
 #include "../util/helpers.h"
-//#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-//#define MAXFIELDS 20
 
 void help(char* progName);
 
