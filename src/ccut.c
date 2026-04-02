@@ -64,8 +64,6 @@ int main(int argc, char* argv[])
     return 1;
 }
 
-
-
 int handleArguments(int argc, char* argv[], Config* config)
 {
     int fieldsInput = 0;
@@ -129,7 +127,7 @@ int handleArguments(int argc, char* argv[], Config* config)
             i++;
             if (strlen(argv[i]) != 1)
             {
-                fprintf(stderr, "Trennezcihen darf nur ein zeichen sein.\n");
+                fprintf(stderr, "Trennzeichen darf nur ein zeichen sein.\n");
                 return 0;
             }
             config->outDelimiter = argv[i][0];
