@@ -1,5 +1,10 @@
 #include "../util/helpers.h"
 
+
+
+#define VERSION "V1.0"
+#define README "../README.md"
+
 void help(char* progName);
 
 void version(void);
@@ -70,7 +75,7 @@ int handleArguments(int argc, char* argv[], Config* config)
 
         if (strcmp(arg, "-h") == 0 || strcmp(arg, "--help") == 0)
         {
-            help(arg);
+            help(README);
 
             //Abbruch bei help
             return 1;
@@ -193,14 +198,16 @@ int getFields(char* str_fields, Config* config)
 
 void version()
 {
-    //todo
-    //print version stuff
-    printf("Show Version\n");
+    printf("Version Output:%s\n", VERSION);
 }
 
 void help(char* progName)
 {
-    //todo
-    //print help stuff
-    printf("Show Help\n");
+
+    FILE* out = fopen(progName, "r");
+    char inputBuff[1024]="";
+    while (!feof(out)) {
+        printf("%s\n", fgets(inputBuff, sizeof(inputBuff),out));
+    }
+    fclose(out);
 }
