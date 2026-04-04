@@ -26,4 +26,3 @@ void processFields(char outputBuffer[], Config* conf);
 int handleInput(FILE* input, Config* config);
 
 void initWithoutQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf);
-

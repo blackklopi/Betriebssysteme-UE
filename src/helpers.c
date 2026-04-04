@@ -3,8 +3,8 @@
 void initWithoutQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
 {
     // use internal delimiter so that if inDelimiter=outDelimiter still works
-    //0x1F = ASCII Unit Seperator that never appears in a file
-    //provided by chat-gpt
+    // 0x1F = ASCII Unit Seperator that never appears in a file
+    // provided by chat-gpt
     char TEMP_DELIM = 0x1F;
 
     int in_quotes = 0;
@@ -39,11 +39,12 @@ void initWithoutQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf
     }
     outputBuffer[fieldPos] = '\0';
 }
+
 void initQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
 {
     // use internal delimiter so that if inDelimiter=outDelimiter still works
-    //0x1F = ASCII Unit Seperator that never appears in a file
-    //provided by chat-gpt
+    // 0x1F = ASCII Unit Seperator that never appears in a file
+    // provided by chat-gpt
     char TEMP_DELIM = 0x1F;
 
     int in_quotes = 0;
@@ -82,8 +83,8 @@ void initQuotesMode(char inputBuffer[], char outputBuffer[], Config* conf)
 void processFields(char outputBuffer[], Config* conf)
 {
     // use internal delimiter so that if inDelimiter=outDelimiter still works
-    //0x1F = ASCII Unit Seperator that never appears in a file
-    //provided by chat-gpt
+    // 0x1F = ASCII Unit Seperator that never appears in a file
+    // provided by chat-gpt
     char TEMP_DELIM = 0x1F;
 
     int curFieldStart = 0;
@@ -112,7 +113,8 @@ void processFields(char outputBuffer[], Config* conf)
             // if the field itself contains a inDelimiter, print it
             if (outsideDelim)
             {
-                // once a column is valid, outsideDelim = true and the outDelimiter will be appended to the previous field
+                // once a column is valid, outsideDelim = true and the outDelimiter will be appended
+                // to the previous field
                 fprintf(stdout, "%c", conf->outDelimiter);
             }
 
@@ -133,8 +135,6 @@ void processFields(char outputBuffer[], Config* conf)
 
 int handleInput(FILE* input, Config* config)
 {
-    //todo
-
     char inputBuffer[1024];
     char outputBuffer[1024];
     int lineNum = 0;
@@ -147,11 +147,13 @@ int handleInput(FILE* input, Config* config)
             inputBuffer[strlen(inputBuffer) - 1] = '\0';
         }
 
-        //header handling
+        // header handling
         if (lineNum == 0 && config->header)
         {
             // if header is set it will never be skipped by -s
-        }else if (lineNum == 0 && !config->header) {
+        }
+        else if (lineNum == 0 && !config->header)
+        {
             lineNum++;
             continue;
         }
@@ -168,34 +170,23 @@ int handleInput(FILE* input, Config* config)
         if (config->besteFunktion)
         {
             initQuotesMode(inputBuffer, outputBuffer, config);
-        }else {
-            //todo
-            //without quote
+        }
+        else
+        {
+            // without quote
             initWithoutQuotesMode(inputBuffer, outputBuffer, config);
         }
 
         // process fields
         processFields(outputBuffer, config);
 
-        // char * result = handleLine(line);
-        // printLine(result);
-
-        //free all strings
-        //return 0 and err msgs
-
         lineNum++;
         fprintf(stdout, "\n");
     }
 
-    fprintf(stdout, "linenum: %d\n", lineNum);
-    fprintf(stdout, "fieldcounter: %d\n", config->fieldcounter);
-    fprintf(stdout, "field: %d\n", config->fields[0]);
+    // fprintf(stdout, "linenum: %d\n", lineNum);
+    // fprintf(stdout, "fieldcounter: %d\n", config->fieldcounter);
+    // fprintf(stdout, "field: %d\n", config->fields[0]);
 
     return 1;
-
-    //zeilenweise lesen
-
-    //zeile splitten
-
-    //print lines
 }

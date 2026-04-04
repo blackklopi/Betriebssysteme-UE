@@ -1,9 +1,7 @@
 #include "../util/helpers.h"
 
-
-
 #define VERSION "V1.0"
-#define README "../README.md"
+#define README  "../README.md"
 
 void help(char* progName);
 
@@ -15,7 +13,7 @@ int getFields(char* str_fields, Config* config);
 
 int main(int argc, char* argv[])
 {
-    //default config
+    // default config
     Config config = {
         .fieldcounter = 0,
         .inDelimiter = ',',
@@ -29,11 +27,11 @@ int main(int argc, char* argv[])
 
     if (handleArguments(argc, argv, &config))
     {
-        //Fehler
+        // Fehler
         return 1;
     }
 
-    //hier wenn kein fehler bei argumente
+    // hier wenn kein fehler bei argumente
     FILE* input;
     int close = 0;
 
@@ -53,7 +51,6 @@ int main(int argc, char* argv[])
     }
 
     int res = handleInput(input, &config);
-    //todo
 
     if (close)
     {
@@ -62,13 +59,11 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-
-
 int handleArguments(int argc, char* argv[], Config* config)
 {
     int fieldsInput = 0;
 
-    //starte bei 1 weil programmname 0
+    // starte bei 1 weil programmname 0
     for (int i = 1; i < argc; i++)
     {
         char* arg = argv[i];
@@ -77,14 +72,14 @@ int handleArguments(int argc, char* argv[], Config* config)
         {
             help(README);
 
-            //Abbruch bei help
+            // Abbruch bei help
             return 1;
         }
         else if (strcmp(arg, "--version") == 0)
         {
             version();
 
-            //Abbruch bei version
+            // Abbruch bei version
             return 1;
         }
         else if (strcmp(arg, "-f") == 0)
@@ -203,11 +198,12 @@ void version()
 
 void help(char* progName)
 {
-
     FILE* out = fopen(progName, "r");
-    char inputBuff[1024]="";
-    while (!feof(out)) {
-        printf("%s\n", fgets(inputBuff, sizeof(inputBuff),out));
+    char inputBuff[1024] = "";
+
+    while (!feof(out))
+    {
+        printf("%s\n", fgets(inputBuff, sizeof(inputBuff), out));
     }
     fclose(out);
 }
